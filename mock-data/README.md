@@ -1,0 +1,1 @@
+### Execute transfer-json-editor-format.bat to convert the seat-data.json format to the convenient editing format output-seat-data.json
