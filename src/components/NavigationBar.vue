@@ -1,32 +1,29 @@
 <template>
   <div class="row justify-center">
-    <div class="q-pa-md q-gutter-sm row">
+    <div class="q-gutter-xs row">
       <q-btn
         no-caps
         class="button"
-        style="margin: 2px;"
         @click="$emit('prev')"
       >
-        &lt; Prev
+        &lt;
       </q-btn>
 
       <q-btn
-        no-caps
-        class="button"
-        style="margin: 2px;"
-        @click="$emit('today')"
+      no-caps
+      class="button"
+      @click="$emit('next')"
       >
-        Today
-      </q-btn>
+        &gt;
+    </q-btn>
 
-      <q-btn
-        no-caps
-        class="button"
-        style="margin: 2px;"
-        @click="$emit('next')"
-      >
-        Next &gt;
-      </q-btn>
+    <q-btn
+      no-caps
+      class="button"
+      @click="$emit('today')"
+    >
+      Today
+    </q-btn>
     </div>
   </div>
 </template>

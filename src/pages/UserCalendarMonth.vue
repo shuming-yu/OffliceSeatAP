@@ -1,31 +1,39 @@
 <template>
-  <div class="subcontent">
-    <NavigationBar
-      @prev="onPrev"
-      @today="onToday"
-      @next="onNext"
-    />
-
-    <div class="row justify-center">
+  <div class="subcontent" style="background-color: #f5f6f8">
+    <div class="row justify-center q-pt-md">
       <div style="display: flex; justify-content: center; width: 100%;">
 
         <!-- 選單 -->
-        <div class="q-pa-md q-mt-xl" style="max-width: 200px">
+        <div class="q-pt-xl q-mr-md" style="display: flex; flex-direction: column; align-items: center; max-width: 200px">
           <q-list dense separator>
             <q-item v-for="item in actionLists" :key="item.id" clickable v-ripple @click="selectAction(item)">
               <q-item-section avatar>
-                <q-icon :name="item.name" :color="item.color" :size="item.size" />
+                <q-icon :name="item.name" :color="item.color" size="2.5em" />
               </q-item-section>
 
               <q-item-section>{{ item.title }}</q-item-section>
             </q-item>
           </q-list>
+
+          <div v-show="showBtn">
+            <q-btn outline rounded class="q-mt-md" style="width: 140px; color: goldenrod;" label="確認送出" />
+          </div>
         </div>
 
         <!-- Calendar -->
-        <div style="display: flex; flex-direction: column; align-items: center; max-width: 800px; width: 100%;">
-          <div style="font-size: 24px; font-weight: bold;">
-            {{ selectedMonth }}
+        <div class="q-pa-md" style="display: flex; flex-direction: column; align-items: center; max-width: 800px; width: 100%; border: 1px solid #ccc; border-radius: 1em; background-color: #fff">
+          <div class="q-pb-md navigationbar">
+            <NavigationBar
+              @prev="onPrev"
+              @today="onToday"
+              @next="onNext"
+            />
+
+            <div class="month-title">
+              {{ selectedMonth }}
+            </div>
+
+            <q-btn @click="showDisplay" rounded push color="primary" label="排班" style="width: 150px" />
           </div>
 
           <QCalendarMonth
@@ -89,28 +97,24 @@ const actionLists = reactive([
     id: 1,
     name: 'work',
     color: 'blue',
-    size: '2.5em',
     title: '進公司'
   },
   {
     id: 2,
     name: 'home',
     color: 'orange',
-    size: '2.5em',
     title: '居家工作'
   },
   {
     id: 3,
     name: 'favorite',
     color: 'pink-5',
-    size: '2.5em',
     title: '請假'
   },
   {
     id: 4,
     name: 'flight',
     color: 'teal',
-    size: '2.5em',
     title: '出差'
   }
 ]);
@@ -118,6 +122,7 @@ const actionLists = reactive([
 const selectedDates = ref([]);
 const events = reactive([]);
 const calendar = ref(null); //ref="calendar"
+const showBtn = ref(false);
 
 // computed
 const selectedMonth = computed(() => {
@@ -278,9 +283,25 @@ function onClickHeadDay (data) {
 function onClickHeadWorkweek (data) {
   console.log('onClickHeadWorkweek', data)
 }
+
+function showDisplay() {
+  showBtn.value = true;
+}
 </script>
 
 <style lang="sass" scoped>
+.navigationbar
+  display: flex
+  justify-content: space-between
+  align-items: center
+  width: 100%
+
+.month-title
+  font-size: 24px
+  font-weight: bold
+  text-align: center
+  flex-grow: 1
+
 .my-event
   position: relative
   font-size: 12px
