@@ -1,11 +1,10 @@
 <template>
-  <div class="subcontent" style="background-color: #f5f6f8">
-    <div class="row justify-center q-pt-md">
-      <div style="display: flex; justify-content: center; width: 100%;">
+  <div class="page-content-tray">
+      <div class="q-py-lg container">
 
         <!-- 選單 -->
-        <div class="q-pt-xl q-mr-md" style="display: flex; flex-direction: column; align-items: center; max-width: 200px">
-          <q-list dense separator>
+        <div class="q-pt-xl sidebar">
+          <q-list separator>
             <q-item v-for="item in actionLists" :key="item.id" clickable v-ripple @click="selectAction(item)">
               <q-item-section avatar>
                 <q-icon :name="item.name" :color="item.color" size="2.5em" />
@@ -16,12 +15,12 @@
           </q-list>
 
           <div v-show="showBtn">
-            <q-btn outline rounded class="q-mt-md" style="width: 140px; color: goldenrod;" label="確認送出" />
+            <q-btn outline rounded class="q-mt-md animated-button" style="width: 140px; color: goldenrod;" label="確認送出" />
           </div>
         </div>
 
         <!-- Calendar -->
-        <div class="q-pa-md" style="display: flex; flex-direction: column; align-items: center; max-width: 800px; width: 100%; border: 1px solid #ccc; border-radius: 1em; background-color: #fff">
+        <div class="q-pa-md main">
           <div class="q-pb-md navigationbar">
             <NavigationBar
               @prev="onPrev"
@@ -42,6 +41,7 @@
             :selected-dates="selectedDates"
             :disabled-days="disabledDays"
             :disabled-weekdays="[0,6]"
+            :day-height="dayHeight"
             :day-min-height="60"
             locale="zh-hant"
             no-active-date
@@ -70,8 +70,8 @@
             </template>
           </QCalendarMonth>
         </div>
+
       </div>
-    </div>
   </div>
 </template>
 
@@ -125,6 +125,17 @@ const calendar = ref(null); //ref="calendar"
 const showBtn = ref(false);
 
 // computed
+const dayHeight = computed(() => {
+  const width = window.innerWidth;
+
+  if (width > 1280) {
+    return 120;
+  }
+  else {
+    return 60;
+  }
+})
+
 const selectedMonth = computed(() => {
   const timeStamp = selectedDate.value;
   return date.formatDate(timeStamp, 'YYYY/MM');
@@ -289,60 +300,142 @@ function showDisplay() {
 }
 </script>
 
-<style lang="sass" scoped>
-.navigationbar
-  display: flex
-  justify-content: space-between
-  align-items: center
-  width: 100%
+<style scoped>
+.page-content-tray {
+  background-color: #f5f6f8;
+  border: 0;
+  font-family: inherit;
+  font-size: 100%;
+  font-stretch: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  margin: 0;
+  padding: 0;
+  vertical-align: baseline;
+  height: 100vh;
+  /* overflow: hidden; */
+}
 
-.month-title
-  font-size: 24px
-  font-weight: bold
-  text-align: center
-  flex-grow: 1
+.container {
+  max-width: 1400px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+}
 
-.my-event
-  position: relative
-  font-size: 12px
-  width: 100%
-  margin: 1px 0 0 0
-  justify-content: center
-  text-overflow: ellipsis
-  overflow: hidden
-  cursor: pointer
+.sidebar {
+  flex-grow: 0;
+  flex-shrink: 0;
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-.title
-  position: relative
-  display: flex
-  justify-content: center
-  align-items: center
-  height: 100%
+.main {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 1em;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .1);
+  flex-grow: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* max-width: 900px; */
+  width: 100%;
+}
 
-.text-white
-  color: white
+.navigationbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
 
-.bg-blue
-  background: blue
+.month-title {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  flex-grow: 1;
+}
 
-.bg-green
-  background: green
+.my-event {
+  position: relative;
+  font-size: 12px;
+  width: 100%;
+  margin: 1px 0 0 0;
+  justify-content: center;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  cursor: pointer;
+}
 
-.bg-orange
-  background: orange
+.title {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  font-size: medium;
+}
 
-.bg-red
-  background: red
+.text-white {
+  color: white;
+}
 
-.bg-teal
-  background: teal
+.bg-blue {
+  background: blue;
+}
 
-.bg-grey
-  background: grey
+.bg-green {
+  background: green;
+}
 
-.bg-purple
-  background: purple
+.bg-orange {
+  background: orange;
+}
 
-.rounded-border
-  border-radius: 2px
+.bg-red {
+  background: red;
+}
+
+.bg-teal {
+  background: teal;
+}
+
+.bg-grey {
+  background: grey;
+}
+
+.bg-purple {
+  background: purple;
+}
+
+.rounded-border {
+  border-radius: 2px;
+}
+
+@media (max-width: 1280px) {
+  .main {
+    max-width: 900px;
+  }
+}
+
+.animated-button {
+  animation: bounceIn 2s infinite;
+}
+
+@keyframes bounceIn {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-20px);
+  }
+  60% {
+    transform: translateY(-15px);
+  }
+}
 </style>
