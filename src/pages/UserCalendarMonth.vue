@@ -15,7 +15,7 @@
           </q-list>
 
           <div v-show="showBtn">
-            <q-btn outline rounded class="q-mt-md animated-button" style="width: 140px; color: goldenrod;" label="確認送出" />
+            <q-btn outline rounded class="q-mt-lg animated-button" style="width: 140px; color: goldenrod;" label="確認送出" />
           </div>
         </div>
 
@@ -89,6 +89,7 @@ import '@quasar/quasar-ui-qcalendar/src/QCalendarMonth.sass'
 import { ref, reactive, computed, onMounted } from 'vue'
 import { date, useQuasar } from 'quasar'
 import NavigationBar from '../components/NavigationBar.vue'
+import { taiwanHolidays } from '../assets/holiday'
 
 const $q = useQuasar();
 const selectedDate = ref(today());
@@ -120,7 +121,7 @@ const actionLists = reactive([
 ]);
 
 const selectedDates = ref([]);
-const events = reactive([]);
+const events = reactive(taiwanHolidays);
 const calendar = ref(null); //ref="calendar"
 const showBtn = ref(false);
 
@@ -202,6 +203,7 @@ function toggleDate (scope) {
 }
 
 function badgeClasses (event, type) {
+  console.log("event", event);
   return {
     [ `text-white bg-${ event.bgcolor }` ]: true,
     'rounded-border': true
