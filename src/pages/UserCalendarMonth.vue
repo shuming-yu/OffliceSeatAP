@@ -41,6 +41,8 @@
             :selected-dates="selectedDates"
             :disabled-days="disabledDays"
             :disabled-weekdays="[0,6]"
+            :disabled-before="disabledBefore"
+            :disabled-after="disabledAfter"
             :day-height="dayHeight"
             :day-min-height="60"
             locale="zh-hant"
@@ -92,7 +94,12 @@ import NavigationBar from '../components/NavigationBar.vue'
 import { taiwanHolidays } from '../assets/holiday'
 
 const $q = useQuasar();
-const selectedDate = ref(today());
+
+let newDate = new Date(); // 2024/07/03
+let adjustedDate = date.adjustDate(newDate, { date: 1 }); // 2024/07/01
+let addOneMonth = date.addToDate(adjustedDate, { months: 1 });  // 2024/08/01
+let formatDate = date.formatDate(addOneMonth, 'YYYY-MM-DD');
+const selectedDate = ref(formatDate);
 const actionLists = reactive([
   {
     id: 1,
@@ -146,6 +153,23 @@ const disabledDays = computed(() => {
   return ['2024-06-10','2024-09-16','2024-09-17','2024-10-10','2024-10-11'];
 })
 
+const disabledBefore = computed(() => {
+  let newDate = new Date();
+  let adjustedDate = date.adjustDate(newDate, { date: 1 });
+  let addOneMonth = date.addToDate(adjustedDate, { months: 1 });
+  let subtractOneDate = date.subtractFromDate(addOneMonth, { date: 1 });
+  let ts = date.formatDate(subtractOneDate, 'YYYY-MM-DD');
+  return ts;
+})
+
+const disabledAfter = computed(() => {
+  let newDate = new Date();
+  let adjustedDate = date.adjustDate(newDate, { date: 1 });
+  let addTwoMonth = date.addToDate(adjustedDate, { months: 3 });
+  let ts = date.formatDate(addTwoMonth, 'YYYY-MM-DD');
+  return ts
+})
+
 const eventsMap = computed(() => {
   const map = {};
   if (events.length > 0) {
@@ -169,6 +193,7 @@ const eventsMap = computed(() => {
   console.log("map:", map);
   return map;
 })
+
 
 
 // methods
@@ -203,7 +228,6 @@ function toggleDate (scope) {
 }
 
 function badgeClasses (event, type) {
-  console.log("event", event);
   return {
     [ `text-white bg-${ event.bgcolor }` ]: true,
     'rounded-border': true
